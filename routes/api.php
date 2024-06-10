@@ -32,12 +32,17 @@ Route::put('/customers/{id}', [CustomerController::class, 'update']);
 Route::delete('/customers/{id}', [CustomerController::class, 'destroy']);
 
 // Order routes
-Route::get('/orders', [OrderController::class, 'index']);
-Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
-Route::post('/orders/{orderId}/cancel', [OrderController::class, 'cancelById']);
-Route::delete('/orders/delete/{customer_id}', [OrderController::class, 'deleteByCustomerId'])->name('orders');
+    Route::get('/orders', [OrderController::class, 'index']);
+    Route::post('/orders', [OrderController::class, 'store']);
+    Route::patch('/orders/{id}', [OrderController::class, 'update']);
+    Route::delete('/orders/{id}', [OrderController::class, 'destroy']);
 
-
+//Chair routes
+Route::get('/chairs', [ChairController::class, 'index']);
+Route::get('/chairs/{id}', [ChairController::class, 'show']);
+Route::post('/chairs', [ChairController::class, 'store']);
+Route::put('/chairs/{id}', [ChairController::class, 'update']);
+Route::delete('/chairs/{id}', [ChairController::class, 'destroy']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('customers', CustomerController::class);

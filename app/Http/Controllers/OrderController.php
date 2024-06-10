@@ -4,17 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Order;
-
+use Illuminate\Support\Facades\Auth;
 class OrderController extends Controller
 {   
+    // Fetch all orders
     public function index()
     {
         $orders = Order::all();
-
         return response()->json(['orders' => $orders], 200);
     }
 
-
+    // Create a new order
     public function store(Request $request)
     {
         $validatedData = $request->validate([
@@ -24,28 +24,25 @@ class OrderController extends Controller
             'price' => 'required|numeric',
         ]);
     
-        
         $order = Order::create($validatedData);
         return response()->json(['message' => 'Order created successfully', 'order' => $order], 201);
     }
 
-    public function cancelById($orderId)
+    public function update(Request $request, $id)
     {
-
-        $order = Order::find($orderId);
-        if (!$order) {
-            return response()->json(['message' => 'Order not found'], 404);
-        }
-        if (auth()->user()->id != $order->customer_id) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
+        $validatedData = $request->validate([
+            'status' => 'sometimes|string|in:pending,processing,shipped,cancelled',
+            'price' => 'sometimes|numeric',
+        ]);
     
-        $order->update(['status' => 'cancelled']);
-        return response()->json(['message' => 'Order cancelled successfully'], 200);
+        $order = Order::findOrFail($id);
+        $order->update($validatedData);
+    
+        return response()->json($order);
     }
+
     
-
-
+    // Delete an order by ID
     public function destroy($id)
     {
         $order = Order::findOrFail($id);
@@ -53,4 +50,3 @@ class OrderController extends Controller
         return response()->json(['message' => 'Order deleted successfully'], 200);
     }
 }
-

@@ -22,7 +22,7 @@ class OrderFactory extends Factory
     public function definition()
     {
         return [
-            'customer_id' => \App\Models\Customer::factory(),
+           'customer_id' => \App\Models\Item::factory(),
             'order_date' => $this->faker->date(),
             'status' => $this->faker->randomElement(['pending', 'processing', 'shipped']),
             'price' => $this->faker->numberBetween(1000, 10000),
