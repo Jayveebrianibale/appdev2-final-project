@@ -34,7 +34,7 @@ Route::delete('/customers/{id}', [CustomerController::class, 'destroy']);
 // Order routes
 Route::get('/orders', [OrderController::class, 'index']);
 Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
-Route::post('/orders/cancel/{customer_id}', [OrderController::class, 'cancelByCustomerId'])->name('orders');
+Route::post('/orders/{orderId}/cancel', [OrderController::class, 'cancelById']);
 Route::delete('/orders/delete/{customer_id}', [OrderController::class, 'deleteByCustomerId'])->name('orders');
 
 

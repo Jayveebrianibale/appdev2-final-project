@@ -52,7 +52,6 @@ class CustomerController extends Controller
         return response()->json(['message' => 'Order created successfully', 'order' => $order], 201);
     }
 
-    // Update the specified resource in storage.
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
@@ -67,20 +66,12 @@ class CustomerController extends Controller
         return response()->json($customer);
     }
 
-    // Remove the specified resource from storage.
     public function destroy($id)
     {
         $customer = Customer::findOrFail($id);
         $customer->delete();
         return response()->json(['message' => 'Customer deleted successfully'], 200);
     }
-    // Display the orders of the specified customer.
-    public function showOrders($id)
-    {
-        $customer = Customer::findOrFail($id);
-        return response()->json($customer->orders);
-    }
-
     
 }
 

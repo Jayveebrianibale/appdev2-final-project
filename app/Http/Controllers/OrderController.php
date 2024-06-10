@@ -29,31 +29,21 @@ class OrderController extends Controller
         return response()->json(['message' => 'Order created successfully', 'order' => $order], 201);
     }
 
-    public function cancelByCustomerId($customerId)
-{
-    // Find orders associated with the provided customer_id
-    $orders = Order::where('customer_id', $customerId)->get();
-    
-    // Check if orders exist
-    if ($orders->isEmpty()) {
-        return response()->json(['message' => 'No orders found for the given customer ID'], 404);
-    }
+    public function cancelById($orderId)
+    {
 
-    // Loop through each order
-    foreach ($orders as $order) {
-        // Check if the customer_id of the order matches the authenticated user's ID
-        if ($order->customer_id != auth()->user()->id) {
-            abort(403, 'Unauthorized');
+        $order = Order::find($orderId);
+        if (!$order) {
+            return response()->json(['message' => 'Order not found'], 404);
         }
-
-        // Update the status of the order to 'cancelled'
-        $order->status = 'cancelled';
-        $order->save();  // Ensure save() is called to persist changes
+        if (auth()->user()->id != $order->customer_id) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+    
+        $order->update(['status' => 'cancelled']);
+        return response()->json(['message' => 'Order cancelled successfully'], 200);
     }
-
-    // Return a JSON response with a success message
-    return response()->json(['message' => 'Orders cancelled successfully'], 200);
-}
+    
 
 
     public function destroy($id)
